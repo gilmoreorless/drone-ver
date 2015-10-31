@@ -37,6 +37,33 @@ function create(data) {
     return new DroneVersion(data);
 }
 
+function parse(version) {
+    if (!version) {
+        return create();
+    }
+    if (version instanceof DroneVersion) {
+        return version;
+    }
+    var bits = (version || '').split('.');
+    var data = {};
+    parts.forEach(function (part, i) {
+        if (typeof bits[i] !== undefined) {
+            data[part] = bits[i];
+        }
+    });
+    // Check for dirty, nasty semverses
+    // TODO: Use a proper dependency for this
+    if (!isNaN(+data.mood)) {
+        throw new TypeError('Woah, that version looks a bit too sensible to me');
+    }
+    // Normalise a bit
+    data.major = +data.major;
+    data.issues = +data.issues;
+    data.social = +data.social;
+    // Return a version
+    return create(data);
+}
+
 function compareParts(part1, part2) {
     if (part1 == part2) return 0;
     return part1 < part2 ? -1 : 1;
@@ -51,4 +78,5 @@ function compare(version1, version2, opts) {
 }
 
 exports.create = create;
+exports.parse = parse;
 exports.compare = compare;

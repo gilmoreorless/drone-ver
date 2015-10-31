@@ -40,6 +40,7 @@ Include it like any other module.
 var droneVer = require('drone-ver');
 ```
 
+
 #### create()
 
 Create a new Drone Version with your own data.
@@ -67,9 +68,29 @@ version.seven;  // 7
 version.toString();  // '3.whimsical.183.5.random.1446168078224.7'
 ```
 
+
+#### parse(versionString)
+
+Parse a Drone Version string into an object with its component parts (as returned by `.create()`).
+
+```js
+var version = droneVer.parse('3.whimsical.183.5.random.1446168078224.7');
+
+version.mood;    // 'whimsical'
+version.issues;  // 183
+```
+
+It will rightly complain if you try to give it a so-called "semantic" version.
+
+```js
+var version = droneVer.parse('2.1.5');
+// TypeError: Woah, that version looks a bit too sensible to me
+```
+
+
 #### compare(version1, version2, options)
 
-Compares two Drone Versions (as returned by `.create()`). Return value:
+Compares two Drone Versions (either strings or objects). Return value:
 
 * `-1` if `version1` is lower than `version2`
 * `0` if the versions are equal
@@ -93,7 +114,7 @@ Alternatively, go find an ice cream to eat, or something. Sorry, what was the qu
 
 ## Credits
 
-Thanks to [Curtis Lassam][curtis] for writing [cube-drone][cube-drone] and [drone-ver][drone-ver-comic].
+Thanks to [Curtis Lassam][curtis] for writing [cube-drone][cube-drone] and the original [drone-ver][drone-ver-comic].
 
 Oh, and for [Horse Drawing Tycoon][horse-video].
 
