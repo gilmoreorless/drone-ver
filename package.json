@@ -1,0 +1,25 @@
+{
+  "name": "drone-ver",
+  "version": "1.0.0",
+  "description": "Drone Versioning made easy, but not more sane.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"I feel that writing tests would go against the spirit of the drone-ver spec.\" && exit 1"
+  },
+  "author": {
+    "name": "Gilmore Davidson",
+    "url": "https://shoehornwithteeth.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gilmoreorless/drone-ver.git"
+  },
+  "bugs": "https://github.com/gilmoreorless/drone-ver/issues",
+  "license": "MIT",
+  "dependencies": {
+    "github": "0.2.4",
+    "parse-github-repo-url": "1.0.0",
+    "prompt": "0.2.14",
+    "random-word": "1.0.2"
+  }
+}
