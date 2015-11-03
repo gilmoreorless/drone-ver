@@ -22,9 +22,9 @@ cd /path/to/your/node/project
 drone-ver
 ```
 
-This will ask you some important questions to generate a valid drone-version, then optionally save it to your `package.json` under the `"droneVersion"` key. It will also query GitHub for some of the data so, um, make sure you have a network connection, I guess?
+This will ask you some important questions to generate a valid Drone Version, then optionally save it to your `package.json` under the `"droneVersion"` key. It will also query GitHub for some of the data so, um, make sure you have a network connection, I guess?
 
-![A SCREENSHOT WILL GO HERE EVENTUALLY]()
+![Example screenshot of using drone-ver on the command line](drone-ver-cli-example.png)
 
 ### Node module
 
@@ -52,7 +52,7 @@ var version = droneVer.create({
     issues: 183,
     social: 5,
     dictionary: 'random',
-    unixtime: Date.now()
+    unixtime: Math.floor(Date.now() / 1000)
 });
 ```
 
@@ -65,7 +65,7 @@ version.major;  // 3
 version.mood;   // 'whimsical'
 version.seven;  // 7
 
-version.toString();  // '3.whimsical.183.5.random.1446168078224.7'
+version.toString();  // '3.whimsical.183.5.random.1446168078.7'
 ```
 
 
@@ -74,7 +74,7 @@ version.toString();  // '3.whimsical.183.5.random.1446168078224.7'
 Parse a Drone Version string into an object with its component parts (as returned by `.create()`).
 
 ```js
-var version = droneVer.parse('3.whimsical.183.5.random.1446168078224.7');
+var version = droneVer.parse('3.whimsical.183.5.random.1446168078.7');
 
 version.mood;    // 'whimsical'
 version.issues;  // 183
