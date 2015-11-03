@@ -1,6 +1,6 @@
-# drone-ver
+# Drone-Ver
 
-A Node module and CLI for generating versions according to the [drone-ver][drone-ver] specification (a.k.a. the best way to version something).
+A Node module and CLI for generating versions according to the [Drone-Ver][drone-ver] specification (a.k.a. the best way to version something).
 
 If you have not read the drone-ver specification yet, why not? It's required reading for this module. **[Go and read it now][drone-ver].** Do not pass Go. Do not use [Go][golang]. Do not collect $200.
 
@@ -28,7 +28,7 @@ This will ask you some important questions to generate a valid drone-version, th
 
 ### Node module
 
-For more control over the version, you can include drone-ver as a dependency.
+For more control over the version, you can include Drone-Ver as a dependency.
 
 ```sh
 npm install --save-dev drone-ver
@@ -98,6 +98,15 @@ Compares two Drone Versions (either strings or objects). Return value:
 
 Comparison is done on the `unixtime` portion of the version, as defined by point 7 of the specification. If you want the MORE EXCITING comparison, pass `{moreExciting: true}` as the `options` parameter, and it will compare the versions based on their `dictionary` portions.
 
+```js
+var version1 = '1.sleepy.0.0.calamitous.1437363538.7';
+var version2 = '2.joyous.0.0.armadillo.1446532221.7';
+
+
+droneVer.compare(version1, version2);  // -1
+droneVer.compare(version1, version2, {moreExciting: true});  // 1
+```
+
 
 ## IAQ (Infrequently Asked Questions)
 
@@ -114,7 +123,7 @@ Alternatively, go find an ice cream to eat, or something. Sorry, what was the qu
 
 ## Credits
 
-Thanks to [Curtis Lassam][curtis] for writing [cube-drone][cube-drone] and the original [drone-ver][drone-ver-comic].
+Thanks to [Curtis Lassam][curtis] for writing [Cube Drone][cube-drone] and the original [Drone-Ver][drone-ver-comic].
 
 Oh, and for [Horse Drawing Tycoon][horse-video].
 
