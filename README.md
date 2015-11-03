@@ -60,7 +60,7 @@ All data properties are optional. You're not allowed to specify the last part of
 
 The return value is an object with data properties for the parts of the version. But you're probably just going to want the full version string.
 
-```
+```js
 version.major;  // 3
 version.mood;   // 'whimsical'
 version.seven;  // 7
@@ -101,7 +101,6 @@ Comparison is done on the `unixtime` portion of the version, as defined by point
 ```js
 var version1 = '1.sleepy.0.0.calamitous.1437363538.7';
 var version2 = '2.joyous.0.0.armadillo.1446532221.7';
-
 
 droneVer.compare(version1, version2);  // -1
 droneVer.compare(version1, version2, {moreExciting: true});  // 1
