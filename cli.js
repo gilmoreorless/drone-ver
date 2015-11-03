@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var prompt = require('prompt');
 var parseGithubUrl = require('parse-github-repo-url');
-// var GitHubApi = require('github');
+var GithubApi = require('github');
 
 /**
  * TODO:
@@ -83,7 +83,7 @@ function gotInputData(err, result) {
         process.exit(1);
     }
     if (result.major) {
-        versionData.major = (+versionData.major || 0) + result.major;
+        versionData.major = (versionData.major || 0) + result.major;
     }
     if (result.mood) {
         versionData.mood = result.mood;
@@ -102,18 +102,44 @@ function findGithubDetails() {
             console.log('\nFound GitHub repository URL. Fetching details...');
             fetchGithubData();
         }
-    } else {
+    }
+    if (!githubDetails) {
         generateDroneVersion();
     }
 }
 
 function fetchGithubData() {
-    console.warn('[TODO]');
-    generateDroneVersion();
+    var githubClient = new GithubApi({
+        version: '3.0.0',
+        protocol: 'https',
+        headers: {
+            'user-agent': 'drone-ver-cli'
+        }
+    });
+
+    githubClient.repos.get({
+        user: githubDetails[0],
+        repo: githubDetails[1],
+    }, gotGithubData);
 }
 
 function gotGithubData(err, result) {
-    // body...
+    if (err) {
+        console.log('Got an error from GitHub. Pretending nothing happened.');
+        generateDroneVersion();
+        return;
+    }
+    var issuesCount = versionData.issues || 0;
+    var socialCount = versionData.social || 0;
+    if (result.hasOwnProperty('open_issues_count')) {
+        issuesCount = result.open_issues_count;
+    }
+    if (result.hasOwnProperty('stargazers_count') && result.hasOwnProperty('forks_count')) {
+        socialCount = result.stargazers_count + result.forks_count;
+    }
+    versionData.issues = issuesCount;
+    versionData.social = socialCount;
+    generateDroneVersion();
 }
 
 

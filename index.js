@@ -57,9 +57,9 @@ function parse(version) {
         throw new TypeError('Woah, that version looks a bit too sensible to me');
     }
     // Normalise a bit
-    data.major = +data.major;
-    data.issues = +data.issues;
-    data.social = +data.social;
+    data.major = +data.major || 0;
+    data.issues = +data.issues || 0;
+    data.social = +data.social || 0;
     // Return a version
     return create(data);
 }
