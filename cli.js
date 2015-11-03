@@ -7,18 +7,6 @@ var prompt = require('prompt');
 var parseGithubUrl = require('parse-github-repo-url');
 var GithubApi = require('github');
 
-/**
- * TODO:
- *
- * - Read version from package.json (if found)
- * - Ask for input (coolness, mood)
- * - Get data from GitHub
- * - Generate version
- *   - If unliked, re-generate dictionary word
- * - Print version, ask if it's good
- *   - If yes, save to package.json
- *   - If no, repeat
- */
 
 /***** USEFUL INFORMATION *****/
 
@@ -153,7 +141,32 @@ function generateDroneVersion() {
     // Do the magic
     generatedVersion = droneVer.create(versionData);
     console.log('\nDrone Version: ' + generatedVersion.toString().bold);
-    askToSave();
+    askIfLiked();
+}
+
+var promptConfigLikedVersion = {
+    properties: {
+        like: {
+            description: '  You may not like that one. Generate a new one? [y/N] '.green.bold,
+            type: 'string'
+        }
+    }
+};
+
+function askIfLiked() {
+    prompt.get(promptConfigLikedVersion, gotLikedAnswer);
+}
+
+function gotLikedAnswer(err, result) {
+    if (err) {
+        console.log(''); // Force a new line
+        process.exit(1);
+    }
+    if (result.like && result.like.toLowerCase() === 'y') {
+        generateDroneVersion();
+    } else {
+        askToSave();
+    }
 }
 
 
