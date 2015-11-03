@@ -1,6 +1,7 @@
 {
   "name": "drone-ver",
   "version": "1.0.0",
+  "droneVersion": "1.mischievous.0.0.hypsographic.1446534495.7",
   "description": "Drone Versioning made easy, but not more sane.",
   "main": "index.js",
   "bin": {
