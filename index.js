@@ -15,14 +15,22 @@ function getProp(obj, prop, def, cast) {
     return value;
 }
 
+function singleWord(string) {
+    return string.replace(/\s/g, '-');
+}
+
+function unixtime() {
+    return Math.floor(Date.now() / 1000);
+}
+
 function DroneVersion(data) {
     data = data || {};
     this.major      = getProp(data, 'major', 0, Number);
-    this.mood       = getProp(data, 'mood', 'indecisive', String);
+    this.mood       = singleWord(getProp(data, 'mood', 'indecisive', String)).toLowerCase();
     this.issues     = getProp(data, 'issues', 0, Number);
     this.social     = getProp(data, 'social', 0, Number);
-    this.dictionary = getProp(data, 'dictionary', randomWord(), String);
-    this.unixtime   = getProp(data, 'unixtime', Date.now(), Number);
+    this.dictionary = getProp(data, 'dictionary', randomWord(), String).toLowerCase();
+    this.unixtime   = getProp(data, 'unixtime', unixtime(), Number);
     this.seven = 7;
 }
 

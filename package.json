@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Drone Versioning made easy, but not more sane.",
   "main": "index.js",
+  "bin": {
+    "drone-ver": "cli.js"
+  },
   "scripts": {
-    "test": "echo \"I feel that writing tests would go against the spirit of the drone-ver spec.\" && exit 1"
+    "test": "echo \"I feel that writing tests would go against the spirit of the Drone-Ver spec.\" && exit 1"
   },
   "author": {
     "name": "Gilmore Davidson",

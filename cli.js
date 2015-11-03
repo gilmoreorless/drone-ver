@@ -50,15 +50,21 @@ function getPackageData() {
 var promptConfigInputData = {
     properties: {
         major: {
-            description: '  How many cool features did you add?'.green.bold,
-            type: 'number'
+            description: '  Did you add any cool features recently? [y/N]'.green.bold
         },
         mood: {
-            description: '  Describe your current mood in one word:'.green.bold,
-            type: 'string'
+            description: '  Describe your current mood in one word:'.green.bold
         }
     }
 };
+
+function answerIsYes(result, prop) {
+    if (result[prop]) {
+        var lower = result[prop].toLowerCase();
+        return (lower === 'y' || lower === 'yes');
+    }
+    return false;
+}
 
 function askForInput() {
     console.log('\nYou need to provide some information to create a proper Drone Version...\n');
@@ -70,8 +76,8 @@ function gotInputData(err, result) {
         console.log(''); // Force a new line
         process.exit(1);
     }
-    if (result.major) {
-        versionData.major = (versionData.major || 0) + result.major;
+    if (answerIsYes(result, 'major')) {
+        versionData.major = (versionData.major || 0) + 1;
     }
     if (result.mood) {
         versionData.mood = result.mood;
@@ -147,8 +153,7 @@ function generateDroneVersion() {
 var promptConfigLikedVersion = {
     properties: {
         like: {
-            description: '  You may not like that one. Generate a new one? [y/N] '.green.bold,
-            type: 'string'
+            description: '  You may not like that one. Generate a new one? [y/N]'.green.bold
         }
     }
 };
@@ -162,7 +167,7 @@ function gotLikedAnswer(err, result) {
         console.log(''); // Force a new line
         process.exit(1);
     }
-    if (result.like && result.like.toLowerCase() === 'y') {
+    if (answerIsYes(result, 'like')) {
         generateDroneVersion();
     } else {
         askToSave();
@@ -175,8 +180,7 @@ function gotLikedAnswer(err, result) {
 var promptConfigSavePackage = {
     properties: {
         save: {
-            description: '  Save this version to package.json? [y/N] '.green.bold,
-            type: 'string'
+            description: '  Save this version to package.json? [y/N]'.green.bold
         }
     }
 };
@@ -192,7 +196,7 @@ function gotSaveAnswer(err, result) {
         console.log(''); // Force a new line
         process.exit(1);
     }
-    if (result.save && result.save.toLowerCase() === 'y') {
+    if (answerIsYes(result, 'save')) {
         savePackageData();
     }
 }
