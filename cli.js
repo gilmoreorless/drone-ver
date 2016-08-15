@@ -89,7 +89,7 @@ function gotInputData(err, result) {
 /***** GET GITHUB PROJECT DETAILS *****/
 
 function findGithubDetails() {
-    if (packageData.repository && packageData.repository.type === 'git') {
+    if (hasPackage && packageData.repository && packageData.repository.type === 'git') {
         var gitUrl = packageData.repository.url;
         githubDetails = parseGithubUrl(gitUrl);
         if (githubDetails) {
