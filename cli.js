@@ -203,7 +203,7 @@ function gotSaveAnswer(err, result) {
 
 function savePackageData() {
     packageData.droneVersion = generatedVersion.toString();
-    fs.writeFile(packagePath, JSON.stringify(packageData, null, 2));
+    fs.writeFile(packagePath, JSON.stringify(packageData, null, 2) + '\n');
 }
 
 
