@@ -128,7 +128,7 @@ Oh, and for [Horse Drawing Tycoon][horse-video].
 
 
 [curtis]: https://twitter.com/classam
-[drone-ver]: https://web.archive.org/web/20160111055020/http://drone-ver.org/
+[drone-ver]: https://dronever.cube-drone.com/
 [drone-ver-comic]: http://cube-drone.com/comics/c/version-sacrifice
 [cube-drone]: http://cube-drone.com/
 [horse-video]: https://www.youtube.com/watch?v=BRbcoXq_x2M
