@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var prompt = require('prompt');
 var parseGithubUrl = require('parse-github-repo-url');
-var GithubApi = require('github');
+var Octokit = require('@octokit/rest').Octokit;
 
 
 /***** USEFUL INFORMATION *****/
@@ -103,33 +103,32 @@ function findGithubDetails() {
 }
 
 function fetchGithubData() {
-    var githubClient = new GithubApi({
-        version: '3.0.0',
-        protocol: 'https',
-        headers: {
-            'user-agent': 'drone-ver-cli'
-        }
+    var droneVerPackageData = require(path.join(__dirname, './package.json'));
+    var octokit = new Octokit({
+        userAgent: `drone-ver-cli v${droneVerPackageData.version}`,
     });
 
-    githubClient.repos.get({
-        user: githubDetails[0],
+    octokit.repos.get({
+        owner: githubDetails[0],
         repo: githubDetails[1],
-    }, gotGithubData);
+    }).then(
+        gotGithubData,
+        function () {
+            console.log('Got an error from GitHub. Pretending nothing happened.');
+            generateDroneVersion();
+        }
+    );
 }
 
-function gotGithubData(err, result) {
-    if (err) {
-        console.log('Got an error from GitHub. Pretending nothing happened.');
-        generateDroneVersion();
-        return;
-    }
+function gotGithubData(result) {
     var issuesCount = versionData.issues || 0;
     var socialCount = versionData.social || 0;
-    if (result.hasOwnProperty('open_issues_count')) {
-        issuesCount = result.open_issues_count;
+    var data = result.data;
+    if (data.hasOwnProperty('open_issues_count')) {
+        issuesCount = data.open_issues_count;
     }
-    if (result.hasOwnProperty('stargazers_count') && result.hasOwnProperty('forks_count')) {
-        socialCount = result.stargazers_count + result.forks_count;
+    if (data.hasOwnProperty('stargazers_count') && data.hasOwnProperty('forks_count')) {
+        socialCount = data.stargazers_count + data.forks_count;
     }
     versionData.issues = issuesCount;
     versionData.social = socialCount;

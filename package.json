@@ -21,7 +21,7 @@
   "bugs": "https://github.com/gilmoreorless/drone-ver/issues",
   "license": "MIT",
   "dependencies": {
-    "github": "0.2.4",
+    "@octokit/rest": "^18.12.0",
     "parse-github-repo-url": "1.0.0",
     "prompt": "0.2.14",
     "random-word": "2.0.0"
