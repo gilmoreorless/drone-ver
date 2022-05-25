@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
-var droneVer = require('./');
 var fs = require('fs');
 var path = require('path');
-var prompt = require('prompt');
+
+var chalk = require('chalk');
+var inquirer = require('inquirer');
 var parseGithubUrl = require('parse-github-repo-url');
 var Octokit = require('@octokit/rest').Octokit;
+
+var droneVer = require('./');
 
 
 /***** USEFUL INFORMATION *****/
@@ -36,7 +39,7 @@ function getPackageData() {
         packageData = require(packagePath);
         console.log('Found an existing package.json, checking for Drone Version...');
         if (packageData.droneVersion) {
-            console.log('...found Drone Version:', packageData.droneVersion.bold);
+            console.log('...found Drone Version:', chalk.bold.green(packageData.droneVersion));
             versionData = droneVer.parse(packageData.droneVersion);
         } else {
             console.log('...no Drone Version found');
@@ -47,36 +50,25 @@ function getPackageData() {
 
 /***** GET INPUT DATA (major, mood) *****/
 
-var promptConfigInputData = {
-    properties: {
-        major: {
-            description: '  Did you add any cool features recently? [y/N]'.green.bold
-        },
-        mood: {
-            description: '  Describe your current mood in one word:'.green.bold
-        }
-    }
-};
-
-function answerIsYes(result, prop) {
-    if (result[prop]) {
-        var lower = result[prop].toLowerCase();
-        return (lower === 'y' || lower === 'yes');
-    }
-    return false;
-}
-
 function askForInput() {
     console.log('\nYou need to provide some information to create a proper Drone Version...\n');
-    prompt.get(promptConfigInputData, gotInputData);
+    inquirer.prompt([
+        {
+            type: 'confirm',
+            name: 'major',
+            message: 'Did you add any cool features recently?',
+            default: false,
+        },
+        {
+            type: 'input',
+            name: 'mood',
+            message: 'Describe your current mood in one word',
+        },
+    ]).then(gotInputData);
 }
 
-function gotInputData(err, result) {
-    if (err) {
-        console.log(''); // Force a new line
-        process.exit(1);
-    }
-    if (answerIsYes(result, 'major')) {
+function gotInputData(result) {
+    if (result.major) {
         versionData.major = (versionData.major || 0) + 1;
     }
     if (result.mood) {
@@ -145,28 +137,23 @@ function generateDroneVersion() {
     delete versionData.unixtime;
     // Do the magic
     generatedVersion = droneVer.create(versionData);
-    console.log('\nDrone Version: ' + generatedVersion.toString().bold);
+    console.log('\nDrone Version: ' + chalk.bold.green(generatedVersion.toString()));
     askIfLiked();
 }
 
-var promptConfigLikedVersion = {
-    properties: {
-        like: {
-            description: '  You may not like that one. Generate a new one? [y/N]'.green.bold
-        }
-    }
-};
-
 function askIfLiked() {
-    prompt.get(promptConfigLikedVersion, gotLikedAnswer);
+    inquirer.prompt([
+        {
+            type: 'confirm',
+            name: 'regenerate',
+            message: 'You may not like that one. Generate a new one?',
+            default: false,
+        },
+    ]).then(gotLikedAnswer);
 }
 
-function gotLikedAnswer(err, result) {
-    if (err) {
-        console.log(''); // Force a new line
-        process.exit(1);
-    }
-    if (answerIsYes(result, 'like')) {
+function gotLikedAnswer(result) {
+    if (result.regenerate) {
         generateDroneVersion();
     } else {
         askToSave();
@@ -176,41 +163,32 @@ function gotLikedAnswer(err, result) {
 
 /***** WRITE PACKAGE DATA *****/
 
-var promptConfigSavePackage = {
-    properties: {
-        save: {
-            description: '  Save this version to package.json? [y/N]'.green.bold
-        }
-    }
-};
-
 function askToSave() {
     if (hasPackage) {
-        prompt.get(promptConfigSavePackage, gotSaveAnswer);
+        inquirer.prompt([
+            {
+                type: 'confirm',
+                name: 'save',
+                message: 'Save this version to package.json?',
+                default: false,
+            },
+        ]).then(gotSaveAnswer);
     }
 }
 
-function gotSaveAnswer(err, result) {
-    if (err) {
-        console.log(''); // Force a new line
-        process.exit(1);
-    }
-    if (answerIsYes(result, 'save')) {
+function gotSaveAnswer(result) {
+    if (result.save) {
         savePackageData();
     }
 }
 
 function savePackageData() {
     packageData.droneVersion = generatedVersion.toString();
-    fs.writeFile(packagePath, JSON.stringify(packageData, null, 2) + '\n');
+    fs.writeFileSync(packagePath, JSON.stringify(packageData, null, 2) + '\n');
 }
 
 
 /**** KICK IT OFF (run the program) ****/
-
-prompt.message = '';
-prompt.delimiter = '';
-prompt.start();
 
 getPackageData();
 askForInput();
